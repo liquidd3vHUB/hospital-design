@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión - Consultorio Médico</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Página de Login -->
+    <div id="loginPage" class="login-page">
+        <div class="login-container">
+            <div class="login-card">
+                <h1>Consultorio Médico</h1>
+                <p class="login-subtitle">Sistema de Gestión Médica</p>
+                <form id="loginForm" class="login-form">
+                    <div class="form-group">
+                        <label for="username">Usuario</label>
+                        <input type="text" id="username" placeholder="medico" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Contraseña</label>
+                        <input type="password" id="password" placeholder="password123" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">Iniciar Sesión</button>
+                </form>
+                <p class="login-hint">Demo: usuario: <strong>medico</strong> | contraseña: <strong>password123</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Página Principal (Dashboard) -->
+    <div id="mainPage" class="main-page" style="display: none;">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h2>Consultorio</h2>
+                <button id="toggleSidebar" class="toggle-sidebar-btn">☰</button>
+            </div>
+            <nav class="sidebar-nav">
+                <button class="nav-btn active" data-section="dashboard">
+                    <span class="nav-icon">📊</span>
+                    <span>Dashboard</span>
+                </button>
+                <button class="nav-btn" data-section="patients">
+                    <span class="nav-icon">👥</span>
+                    <span>Pacientes</span>
+                </button>
+                <button class="nav-btn" data-section="appointments">
+                    <span class="nav-icon">📅</span>
+                    <span>Citas</span>
+                </button>
+                <button class="nav-btn" data-section="settings">
+                    <span class="nav-icon">⚙️</span>
+                    <span>Configuración</span>
+                </button>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logoutBtn" class="btn btn-secondary btn-full">Cerrar Sesión</button>
+            </div>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <h1 id="pageTitle">Dashboard</h1>
+                </div>
+                <div class="header-right">
+                    <button id="themeToggle" class="btn-icon" title="Cambiar tema">🌙</button>
+                    <div class="user-info">
+                        <span id="userName">Dr. Médico</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Secciones de Contenido -->
+            <div class="content-area">
+                <!-- DASHBOARD -->
+                <section id="dashboardSection" class="section active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="todayAppointments">0</div>
+                            <div class="stat-label">Citas Hoy</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalPatients">0</div>
+                            <div class="stat-label">Pacientes</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="pendingAppointments">0</div>
+                            <div class="stat-label">Pendientes</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="completedToday">0</div>
+                            <div class="stat-label">Completadas Hoy</div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-row">
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h2>Citas del Día</h2>
+                                <input type="date" id="appointmentDatePicker" class="date-picker">
+                            </div>
+                            <div id="appointmentsList" class="appointments-list">
+                                <!-- Las citas se cargarán aquí -->
+                            </div>
+                            <button id="newAppointmentBtn" class="btn btn-primary">+ Nueva Cita</button>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h2>Alertas y Recordatorios</h2>
+                            </div>
+                            <div id="alertsList" class="alerts-list">
+                                <!-- Los recordatorios se cargarán aquí -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PACIENTES -->
+                <section id="patientsSection" class="section">
+                    <div class="section-header">
+                        <h2>Gestión de Pacientes</h2>
+                        <button id="newPatientBtn" class="btn btn-primary">+ Nuevo Paciente</button>
+                    </div>
+
+                    <div class="search-box">
+                        <input type="text" id="patientSearchInput" placeholder="Buscar por nombre o ID...">
+                        <button id="searchBtn" class="btn btn-secondary">Buscar</button>
+                    </div>
+
+                    <div id="patientsList" class="patients-list">
+                        <!-- Los pacientes se cargarán aquí -->
+                    </div>
+                </section>
+
+                <!-- CITAS -->
+                <section id="appointmentsSection" class="section">
+                    <div class="section-header">
+                        <h2>Gestión de Citas</h2>
+                        <button id="newAppointmentBtnSection" class="btn btn-primary">+ Nueva Cita</button>
+                    </div>
+
+                    <div class="filters">
+                        <select id="appointmentStatusFilter" class="filter-select">
+                            <option value="">Todos los estados</option>
+                            <option value="pendiente">Pendiente</option>
+                            <option value="completada">Completada</option>
+                            <option value="cancelada">Cancelada</option>
+                        </select>
+                    </div>
+
+                    <div id="appointmentsListFull" class="appointments-list-full">
+                        <!-- Las citas se cargarán aquí -->
+                    </div>
+                </section>
+
+                <!-- CONFIGURACIÓN -->
+                <section id="settingsSection" class="section">
+                    <div class="section-header">
+                        <h2>Configuración</h2>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Preferencias</h3>
+                        <div class="setting-item">
+                            <label for="darkModeToggle">Modo Oscuro</label>
+                            <input type="checkbox" id="darkModeToggle" class="toggle-checkbox">
+                        </div>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Datos</h3>
+                        <button id="exportDataBtn" class="btn btn-secondary">📥 Exportar Datos (JSON)</button>
+                        <button id="resetDataBtn" class="btn btn-danger">🔄 Reiniciar Datos Demo</button>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODALES -->
+
+    <!-- Modal: Formulario de Cita -->
+    <div id="appointmentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="appointmentModalTitle">Nueva Cita</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="appointmentForm" class="form-modal">
+                <div class="form-group">
+                    <label for="appointmentPatient">Paciente *</label>
+                    <select id="appointmentPatient" required>
+                        <option value="">Selecciona un paciente</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="appointmentDate">Fecha *</label>
+                        <input type="date" id="appointmentDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="appointmentTime">Hora *</label>
+                        <input type="time" id="appointmentTime" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="appointmentReason">Motivo *</label>
+                    <textarea id="appointmentReason" placeholder="Razón de la consulta" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="appointmentStatus">Estado</label>
+                    <select id="appointmentStatus">
+                        <option value="pendiente">Pendiente</option>
+                        <option value="completada">Completada</option>
+                        <option value="cancelada">Cancelada</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="appointmentNotes">Notas</label>
+                    <textarea id="appointmentNotes" placeholder="Notas adicionales"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary modal-close-btn">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cita</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Historial Médico del Paciente -->
+    <div id="medicalHistoryModal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>Historial Médico - <span id="historyPatientName"></span></h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="visits">Visitas</button>
+                    <button class="tab-btn" data-tab="medications">Medicamentos</button>
+                    <button class="tab-btn" data-tab="allergies">Alergias</button>
+                    <button class="tab-btn" data-tab="notes">Notas Generales</button>
+                </div>
+
+                <!-- Tab: Visitas -->
+                <div id="visitsTab" class="tab-content active">
+                    <button id="addVisitBtn" class="btn btn-secondary">+ Agregar Visita</button>
+                    <div id="visitsList" class="history-list">
+                        <!-- Las visitas se cargarán aquí -->
+                    </div>
+                    <form id="visitForm" class="history-form" style="display: none;">
+                        <div class="form-group">
+                            <label for="visitDate">Fecha</label>
+                            <input type="date" id="visitDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="visitDiagnosis">Diagnóstico</label>
+                            <textarea id="visitDiagnosis" placeholder="Diagnóstico" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="visitTreatment">Tratamiento</label>
+                            <textarea id="visitTreatment" placeholder="Tratamiento recomendado" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Guardar Visita</button>
+                        <button type="button" class="btn btn-secondary cancel-form">Cancelar</button>
+                    </form>
+                </div>
+
+                <!-- Tab: Medicamentos -->
+                <div id="medicationsTab" class="tab-content">
+                    <button id="addMedicationBtn" class="btn btn-secondary">+ Agregar Medicamento</button>
+                    <div id="medicationsList" class="history-list">
+                        <!-- Los medicamentos se cargarán aquí -->
+                    </div>
+                    <form id="medicationForm" class="history-form" style="display: none;">
+                        <div class="form-group">
+                            <label for="medicationName">Nombre del Medicamento</label>
+                            <input type="text" id="medicationName" placeholder="Nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="medicationDose">Dosis</label>
+                            <input type="text" id="medicationDose" placeholder="Ej: 500mg" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="medicationFrequency">Frecuencia</label>
+                            <input type="text" id="medicationFrequency" placeholder="Ej: 3 veces al día" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Guardar Medicamento</button>
+                        <button type="button" class="btn btn-secondary cancel-form">Cancelar</button>
+                    </form>
+                </div>
+
+                <!-- Tab: Alergias -->
+                <div id="allergiesTab" class="tab-content">
+                    <button id="addAllergyBtn" class="btn btn-secondary">+ Agregar Alergia</button>
+                    <div id="allergiesList" class="history-list">
+                        <!-- Las alergias se cargarán aquí -->
+                    </div>
+                    <form id="allergyForm" class="history-form" style="display: none;">
+                        <div class="form-group">
+                            <label for="allergyName">Alergia</label>
+                            <input type="text" id="allergyName" placeholder="Nombre de la alergia" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="allergySeverity">Severidad</label>
+                            <select id="allergySeverity" required>
+                                <option value="leve">Leve</option>
+                                <option value="moderada">Moderada</option>
+                                <option value="grave">Grave</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Guardar Alergia</button>
+                        <button type="button" class="btn btn-secondary cancel-form">Cancelar</button>
+                    </form>
+                </div>
+
+                <!-- Tab: Notas Generales -->
+                <div id="notesTab" class="tab-content">
+                    <div id="generalNotes" class="general-notes">
+                        <!-- Las notas se cargarán aquí -->
+                    </div>
+                    <form id="notesForm" class="history-form">
+                        <div class="form-group">
+                            <label for="generalNotesText">Notas Generales</label>
+                            <textarea id="generalNotesText" placeholder="Notas generales del paciente" rows="6"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Guardar Notas</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Nuevo/Editar Paciente -->
+    <div id="patientModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="patientModalTitle">Nuevo Paciente</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="patientForm" class="form-modal">
+                <div class="form-group">
+                    <label for="patientName">Nombre Completo *</label>
+                    <input type="text" id="patientName" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="patientAge">Edad *</label>
+                        <input type="number" id="patientAge" min="0" max="150" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="patientGender">Género *</label>
+                        <select id="patientGender" required>
+                            <option value="">Selecciona</option>
+                            <option value="masculino">Masculino</option>
+                            <option value="femenino">Femenino</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="patientEmail">Email *</label>
+                    <input type="email" id="patientEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="patientPhone">Teléfono *</label>
+                    <input type="tel" id="patientPhone" required>
+                </div>
+                <div class="form-group">
+                    <label for="patientAddress">Dirección</label>
+                    <input type="text" id="patientAddress" placeholder="Dirección">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary modal-close-btn">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Paciente</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/appointments.js"></script>
+    <script src="js/patients.js"></script>
+    <script src="js/history.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
